@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AngelHub</title>
+    <style>
+        /* Global Styles */
+        :root {
+            --primary: #5865F2; /* Discord Blurple */
+            --hover-bg: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.15);
+            --glow: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Raindrop Effect */
+        .rain {
+            position: fixed;
+            top: -50px;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .raindrop {
+            position: absolute;
+            width: 2px;
+            height: 50px;
+            background: linear-gradient(transparent, rgba(255, 255, 255, 0.1));
+            animation: fall 2s linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-50px) rotate(15deg); }
+            100% { transform: translateY(100vh) rotate(15deg); }
+        }
+
+        /* Navigation */
+        nav {
+            padding: 1.2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(12px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .brand img {
+            height: 42px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-button {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.8rem 1.8rem;
+            border: 1.5px solid var(--border);
+            border-radius: 50px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .nav-button:hover {
+            background: var(--hover-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Discord Button */
+        .discord-btn {
+            background: var(--primary);
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white !important;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1.5px solid rgba(114, 137, 218, 0.3);
+        }
+
+        .discord-btn:hover {
+            background: #677bc4;
+            transform: translateY(-2px);
+        }
+
+        .discord-btn img {
+            width: 24px;
+            height: 24px;
+            filter: brightness(0) invert(1);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 120px;
+            padding: 0 5%;
+            text-align: center;
+        }
+
+        .executor-image {
+            width: min(90%, 800px);
+            border-radius: 20px;
+            margin: 3rem 0;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+        }
+
+        /* CTA Buttons */
+        .cta-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            padding: 1.2rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--hover-bg);
+            border: 1.5px solid var(--border);
+            backdrop-filter: blur(6px);
+            color: white !important;
+        }
+
+        .cta-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        .cta-button img {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .faq-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            background: linear-gradient(45deg, #fff, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(15, 15, 15, 0.4);
+        }
+
+        details summary {
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0.8rem;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        details summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details summary::after {
+            content: "➕";
+            transition: transform 0.3s ease;
+        }
+
+        details[open] summary::after {
+            content: "➖";
+        }
+
+        details p {
+            padding: 1rem;
+            color: #ccc;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(15, 15, 15, 0.95);
+            padding: 3rem 5%;
+            margin-top: 5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.2rem;
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-btn {
+            padding: 0.8rem;
+            border-radius: 50%;
+            background: var(--hover-bg);
+            display: flex;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .social-btn img {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 1.5rem;
+            }
+            
+            .nav-center {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .cta-container {
+                flex-direction: column;
+            }
+            
+            footer {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Raindrop Effect -->
+    <div class="rain"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="brand">
+            <img src="https://media.discordapp.net/attachments/1332954298929254541/1352747434454941827/Adobe_Express_-_file.png?ex=67df23b9&is=67ddd239&hm=ca182ecc7cd11466c5301fca484c1d535fc41b7a4b480efdfaa6ca80cfe188d6&=&format=webp&quality=lossless&width=823&height=823" alt="AngelHub Logo">
+            AngelHub
+        </div>
+        <div class="nav-center">
+            <a href="index.html" class="nav-button">Home</a>
+            <a href="help.html" class="nav-button">Help</a>
+            <a href="download.html" class="nav-button">Download</a>
+            <a href="credits.html" class="nav-button">Credits</a>
+        </div>
+        <a href="https://discord.gg/XsCWjDqj" class="discord-btn" target="_blank">
+            <img src="https://media.discordapp.net/attachments/1332954298929254541/1352743905149456445/discord_icon_195948.png?ex=67df206f&is=67ddceef&hm=3d5a043bddd076eadab5bb1ac602220b88ab00276076aa19a884d7f89b15062c&=&format=webp&quality=lossless&width=640&height=511" alt="Discord">
+            Join Discord
+        </a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <img src="https://media.discordapp.net/attachments/1332954298929254541/1352580671629037609/angelhub.PNG?ex=67de8869&is=67dd36e9&hm=f8de3acbbebc82c35c4ca1c2820fb1856f52094621fb5c775c4a1de65f458713&=&format=webp&quality=lossless&width=691&height=366" alt="PC Executor" class="executor-image">
+        
+        <div class="cta-container">
+            <a href="download.html" class="cta-button">
+                Download Now
+                <img src="https://media.discordapp.net/attachments/1332954298929254541/1352743904587415552/downloadfolder_87541.png?ex=67df206f&is=67ddceef&hm=a60dca870f0c40bc1724174a9874114a915171ef747fd474154900e046271aa1&=&format=webp&quality=lossless&width=640&height=640" alt="Download">
+            </a>
+            <a href="help.html" class="cta-button">
+                Help & Tutorial
+                <img src="https://media.discordapp.net/attachments/1332954298929254541/1352743904251740321/arrow-right_icon-icons.com_72375.png?ex=67df206f&is=67ddceef&hm=1f0a2f6ecb6d2a91eb4689b3fb231dae8f9642b47ee90adf3912b9a44a5b5bc3&=&format=webp&quality=lossless&width=640&height=640" alt="Arrow">
+            </a>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2 class="faq-title">Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <details>
+                    <summary>Is AngelHub Safe?</summary>
+                    <p>AngelHub employs military-grade encryption and regular security audits to ensure complete safety for all users.</p>
+                </details>
+            </div>
+            <div class="faq-item">
+                <details>
+                    <summary>Can I get banned with AngelHub?</summary>
+                    <p>Our dynamic fingerprint masking system ensures near-zero detection rates when used responsibly.</p>
+                </details>
+            </div>
+            <div class="faq-item">
+                <details>
+                    <summary>How often does AngelHub update?</summary>
+                    <p>We push real-time updates with new features and security patches every 72 hours.</p>
+                </details>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-brand">
+            <img src="https://media.discordapp.net/attachments/1332954298929254541/1352747434454941827/Adobe_Express_-_file.png?ex=67df23b9&is=67ddd239&hm=ca182ecc7cd11466c5301fca484c1d535fc41b7a4b480efdfaa6ca80cfe188d6&=&format=webp&quality=lossless&width=823&height=823" alt="Logo" width="40">
+            <p>Experience the future</p>
+        </div>
+        <div class="social-buttons">
+            <a href="https://discord.gg/XsCWjDqj" class="social-btn" target="_blank">
+                <img src="https://media.discordapp.net/attachments/1332954298929254541/1352743905149456445/discord_icon_195948.png?ex=67df206f&is=67ddceef&hm=3d5a043bddd076eadab5bb1ac602220b88ab00276076aa19a884d7f89b15062c&=&format=webp&quality=lossless&width=640&height=511" alt="Discord">
+            </a>
+            <a href="https://github.com/NxYDev" class="social-btn" target="_blank">
+                <img src="https://media.discordapp.net/attachments/1332954298929254541/1352743904889274448/Github_icon-icons.com_49946.png?ex=67df206f&is=67ddceef&hm=54f570dbeb9bf04f2c8ea5629308c675a88b041a0559d73a2add66677261543b&=&format=webp&quality=lossless&width=640&height=640" alt="GitHub">
+            </a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Raindrop Generator
+        function createRain() {
+            const rainContainer = document.querySelector('.rain');
+            for(let i = 0; i < 50; i++) {
+                const raindrop = document.createElement('div');
+                raindrop.classList.add('raindrop');
+                raindrop.style.left = Math.random() * 100 + '%';
+                raindrop.style.animationDelay = Math.random() * 2 + 's';
+                rainContainer.appendChild(raindrop);
+            }
+        }
+        createRain();
+    </script>
+</body>
+</html>
